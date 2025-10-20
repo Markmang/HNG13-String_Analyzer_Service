@@ -1,0 +1,66 @@
+# Local environment
+# --- Python and Virtual Environment ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+ENV/
+.venv/
+
+# --- Django SQLite Database (local only) ---
+db.sqlite3
+db.sqlite3-journal
+
+# --- Django Static and Media Files ---
+staticfiles/
+media/
+static/
+*.log
+
+# --- Environment & Secrets ---
+.env
+.env.*
+*.env
+
+# --- IDE / Editor Files ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db
+
+# --- Test and Coverage Reports ---
+.coverage
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.cache
+.tox/
+.pytest_cache/
+
+# --- Migrations Cache (optional, keep if you want to track schema) ---
+# Uncomment next line if you don’t want migrations in repo
+# */migrations/__pycache__/
+# */migrations/*.py
+
+# --- Compiled / Build artifacts ---
+build/
+dist/
+*.egg-info/
+*.egg
+MANIFEST
+
+# --- JetBrains IDE (PyCharm, IntelliJ) ---
+.idea/
+*.iml
+
+# --- PythonAnywhere Specific (temporary logs etc) ---
+*.log
+__pycache__/
+tmp/
