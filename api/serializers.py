@@ -1,12 +1,26 @@
+# api/serializers.py
 from rest_framework import serializers
 from .models import AnalyzedString
 from .utils import analyze_string
 
 class AnalyzedStringSerializer(serializers.ModelSerializer):
+    id = serializers.CharField(source='sha256_hash', read_only=True)  # present id as sha256_hash
+
     class Meta:
         model = AnalyzedString
-        fields = '__all__'
+        fields = [
+            'id',
+            'value',
+            'length',
+            'is_palindrome',
+            'unique_characters',
+            'word_count',
+            'sha256_hash',
+            'character_frequency_map',
+            'created_at',
+        ]
         read_only_fields = [
+            'id',
             'sha256_hash',
             'length',
             'is_palindrome',
@@ -17,6 +31,7 @@ class AnalyzedStringSerializer(serializers.ModelSerializer):
         ]
 
     def validate_value(self, value):
+        # Missing/empty check handled by required field; here we enforce type
         if not isinstance(value, str):
             raise serializers.ValidationError("Value must be a string.")
         if not value.strip():
@@ -27,11 +42,11 @@ class AnalyzedStringSerializer(serializers.ModelSerializer):
         value = validated_data.get("value")
         analysis = analyze_string(value)
 
-        # Check if it already exists
+        # Duplicate check: if sha256 already exists, raise ValidationError (view maps this to 409)
         if AnalyzedString.objects.filter(sha256_hash=analysis["sha256_hash"]).exists():
-            raise serializers.ValidationError({"detail": "String already exists in the system."})
+            # Raise with this exact message so view can identify it
+            raise serializers.ValidationError("String already exists in the system.")
 
-        # Create the analyzed string record
         return AnalyzedString.objects.create(
             value=value,
             sha256_hash=analysis["sha256_hash"],
